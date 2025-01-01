@@ -15,12 +15,7 @@ export const POST = async (req) => {
         await connectDB();
 
         // Check if user already exists
-        const existingUser = await Room.findOne({ roomname });
-        if (existingUser) {
-            console.log("User already exists");
-            return NextResponse.json({ error: "User already exists" }, { status: 400 });
-        }
-
+       
         // Create new user
         const newRoom = new Room({
             roomname,

@@ -83,7 +83,7 @@ export default function Home() {
           >
             Cancel
           </Button>
-          <Button onClick={handleAdd}>Add Room</Button>
+          <Button onClick={handleAdd}>Join / Create Room</Button>
         </CardFooter>
       </Card>
     </div>

@@ -12,10 +12,7 @@ const connectDB = async () => {
     console.log("Creating new connection");
 
     try {
-        const db = await mongoose.connect(uri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        const db = await mongoose.connect(uri);
         cachedDB = db;
         console.log("New connection established");
         return db;
