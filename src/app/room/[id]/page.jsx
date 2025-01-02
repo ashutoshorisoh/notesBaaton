@@ -8,7 +8,6 @@ const Home = () => {
   const [note, setNote] = useState("");
   const [notes, setNotes] = useState([]);
   const [message, setMessage] = useState("");
-  const [editingId, setEditingId] = useState(null); // Track the note being edited
 
   const router = useRouter();
   const params = useParams();
@@ -18,57 +17,42 @@ const Home = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await axios.get(`/api/notes?room=${roomId}`);
-        setNotes(res.data.notes);
+        const res = await axios.get(`/api/fetchnote/${roomId}`); // API call to fetch notes by roomId
+        if (res.status === 200) {
+          setNotes(res.data.notes); // Update the notes state with the fetched notes
+        }
       } catch (error) {
         console.error("Error fetching notes:", error);
+        setMessage("Failed to fetch notes");
       }
     };
 
     if (roomId) {
-      fetchNotes();
+      fetchNotes(); // Fetch notes only if roomId is available
     }
   }, [roomId]);
 
-  // Add or update a note
+  // Add a new note
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      if (editingId) {
-        // Update note
-        const res = await axios.patch("/api/notes", { id: editingId, note });
-        if (res.status === 200) {
-          setMessage("Note updated successfully!");
-        }
-      } else {
-        // Add new note
-        const res = await axios.post("/api/notes", { note, room: roomId });
-        if (res.status === 201) {
-          setMessage("Note added successfully!");
-        }
+      const res = await axios.post("/api/notes", { note, room: roomId });
+      if (res.status === 201) {
+        setMessage("Note added successfully!");
+        // Refresh notes after adding a new note
+        const newNotes = await axios.get(`/api/fetchnote/${roomId}`);
+        setNotes(newNotes.data.notes); // Update notes after adding
       }
-
-      setNote("");
-      setEditingId(null); // Reset editing state
-      // Refresh notes
-      const refreshedNotes = await axios.get(`/api/notes?room=${roomId}`);
-      setNotes(refreshedNotes.data.notes);
+      setNote(""); // Clear note input after submission
     } catch (error) {
       console.error("Error submitting note:", error);
-      setMessage(
-        error.response?.data?.error || "Error submitting note"
-      );
+      setMessage(error.response?.data?.error || "Error submitting note");
     }
   };
 
-  const handleEdit = (id, currentNote) => {
-    setEditingId(id);
-    setNote(currentNote);
-  };
-
   const handleLogout = () => {
-    router.push("/");
+    router.push("/"); // Navigate to the home page on logout
   };
 
   return (
@@ -76,7 +60,7 @@ const Home = () => {
       <h1 className="lg:text-7xl text-4xl font-bold mb-4 text-emerald-200">notesBaaton</h1>
       <form
         onSubmit={handleSubmit}
-        className=" items-center  w-[76%] pt-2 pb-2 flex flex-row  justify-start"
+        className="items-center w-[76%] pt-2 pb-2 flex flex-row justify-start"
       >
         <textarea
           className="w-[90%] h-16 p-2 ml-2 mr-2 border rounded-md"
@@ -86,32 +70,21 @@ const Home = () => {
         />
         <button
           type="submit"
-          className=" pl-5 pr-5 h-16 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="pl-5 pr-5 h-16 bg-blue-500 text-white rounded-md hover:bg-blue-600"
         >
-          {editingId ? "Update Note" : "Submit"}
+          Submit
         </button>
       </form>
       {message && (
         <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
       )}
-      <div className=" w-3/4">
+      <div className="w-3/4">
         {notes.map((note) => (
           <div
             key={note._id}
-            className="p-4 mb-4 bg-gray-900 text-white shadow-sm shadow-white rounded-md flex justify-between items-center"
+            className="p-4 mb-4 bg-gray-900 text-white shadow-sm shadow-white rounded-md"
           >
-            <div>
-              <p>{note.note}</p>
-              <p className="text-xs text-gray-500">
-               
-              </p>
-            </div>
-            <button
-              onClick={() => handleEdit(note._id, note.note)}
-              className="px-2 py-1 text-sm text-white bg-yellow-500 rounded-md"
-            >
-              Edit
-            </button>
+            <p>{note.note}</p>
           </div>
         ))}
       </div>
