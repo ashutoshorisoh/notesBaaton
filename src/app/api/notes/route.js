@@ -1,8 +1,9 @@
-import Notes from "@/app/models/notes.model";
+import mongoose from "mongoose"; // Make sure mongoose is imported
 import { NextResponse } from "next/server";
 import connectDB from "@/dbconfig/dbconfig";
+import Notes from "@/app/models/notes.model";
+import Room from "@/app/models/room.model";
 
-// POST: Add a new note
 export const POST = async (req) => {
   try {
     await connectDB(); // Ensure DB is connected
@@ -17,7 +18,10 @@ export const POST = async (req) => {
       );
     }
 
-    const newNote = new Notes({ note, room });
+    // Ensure room ID is a valid ObjectId
+    const roomId = new mongoose.Types.ObjectId(room);  // Use 'new' here
+
+    const newNote = new Notes({ note, room: roomId });
     await newNote.save();
 
     return NextResponse.json(

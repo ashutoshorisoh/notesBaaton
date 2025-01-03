@@ -17,9 +17,14 @@ const Home = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await axios.get(`/api/fetchnote/${roomId}`); // API call to fetch notes by roomId
+        const res = await axios.get("/api/fetchnote", {
+          params: { roomId }, // Axios automatically converts this to a query string
+        });
         if (res.status === 200) {
-          setNotes(res.data.notes); // Update the notes state with the fetched notes
+          // Handle the fetched actualNote response
+          if (res.data.actualNote) {
+            setNotes([res.data.actualNote]); // Wrap the single note in an array to maintain compatibility
+          }
         }
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -41,8 +46,10 @@ const Home = () => {
       if (res.status === 201) {
         setMessage("Note added successfully!");
         // Refresh notes after adding a new note
-        const newNotes = await axios.get(`/api/fetchnote/${roomId}`);
-        setNotes(newNotes.data.notes); // Update notes after adding
+        const newNotes = await axios.get("/api/fetchnote", {
+          params: { roomId },
+        });
+        setNotes([newNotes.data.actualNote]); // Update notes with the new note
       }
       setNote(""); // Clear note input after submission
     } catch (error) {
@@ -75,19 +82,24 @@ const Home = () => {
           Submit
         </button>
       </form>
+
       {message && (
         <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
       )}
-      <div className="w-3/4">
-        {notes.map((note) => (
-          <div
-            key={note._id}
-            className="p-4 mb-4 bg-gray-900 text-white shadow-sm shadow-white rounded-md"
-          >
-            <p>{note.note}</p>
-          </div>
-        ))}
+
+      <div className="notes-list mt-4">
+        {notes && notes.length > 0 ? (
+          notes.map((noteItem, index) => (
+            <div key={index} className="note-item bg-gray-800 text-white p-4 mb-2 rounded-md">
+              <p>{noteItem}</p>
+              <p className="text-sm text-gray-400">{new Date().toLocaleString()}</p>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-sm text-gray-700">No notes available</p>
+        )}
       </div>
+
       <button
         className="bg-red-800 text-white pl-2 pr-2 pt-1 pb-1 mt-4"
         onClick={handleLogout}
