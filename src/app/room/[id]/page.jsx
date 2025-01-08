@@ -77,7 +77,7 @@ const Home = () => {
         />
         <button
           type="submit"
-          className="pl-5 pr-5 h-16 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="pl-5 pb-3 pt-3  pr-5 h-16 bg-blue-500 text-white rounded-md hover:bg-blue-600"
         >
           Submit
         </button>
