@@ -20,11 +20,8 @@ const Home = () => {
         const res = await axios.get("/api/fetchnote", {
           params: { roomId }, // Axios automatically converts this to a query string
         });
-        if (res.status === 200) {
-          // Handle the fetched actualNote response
-          if (res.data.actualNote) {
-            setNotes([res.data.actualNote]); // Wrap the single note in an array to maintain compatibility
-          }
+        if (res.status == 404) {
+          console.log(res.message)
         }
       } catch (error) {
         console.error("Error fetching notes:", error);
