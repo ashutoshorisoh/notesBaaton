@@ -21,7 +21,9 @@ export const GET = async (req) => {
     // Fetch notes based on roomId
     const fetchNotesByRoomId = async (roomId) => {
       try {
-        const notes = await Notes.find({ room: roomId });
+        const notes = await Notes.find({ room: roomId })
+        .sort({ createdAt: -1 })
+      .lean();
         return notes;
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -34,10 +36,15 @@ export const GET = async (req) => {
     // If no notes are found, return a 404 response
     if (!notes || notes.length === 0) {
       return NextResponse.json(
-        { message: "No notes found for the provided room ID" },
-        { status: 404 }
+        { notes: [] }, // Return empty array instead of a 404
+        { status: 200 }
       );
     }
+
+    console.log("Received Room ID:", roomId);
+console.log("Found Notes:", notes);
+
+    
 
     // Return the fetched notes
     return NextResponse.json(

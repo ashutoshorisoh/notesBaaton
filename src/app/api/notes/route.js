@@ -1,4 +1,4 @@
-import mongoose from "mongoose"; // Make sure mongoose is imported
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 import connectDB from "@/dbconfig/dbconfig";
 import Notes from "@/app/models/notes.model";
@@ -8,6 +8,8 @@ export const POST = async (req) => {
   try {
     await connectDB(); // Ensure DB is connected
     const body = await req.json();
+
+    console.log("Received body:", body);  // Log the request body for debugging
 
     const { note, room } = body;
 
@@ -19,15 +21,14 @@ export const POST = async (req) => {
     }
 
     // Ensure room ID is a valid ObjectId
-    const roomId = new mongoose.Types.ObjectId(room);  // Use 'new' here
+    const roomId = new mongoose.Types.ObjectId(room);
 
     const newNote = new Notes({ note, room: roomId });
     await newNote.save();
 
-    return NextResponse.json(
-      { message: "Note added successfully", newNote },
-      { status: 201 }
-    );
+    console.log("Saved newNote:", newNote);  // Log the saved note for debugging
+
+    return NextResponse.json(newNote, { status: 201 }); // Send only the `newNote`
   } catch (error) {
     console.error("Error adding note:", error);
     return NextResponse.json(
