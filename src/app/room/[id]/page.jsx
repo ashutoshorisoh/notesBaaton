@@ -89,10 +89,10 @@ const Home = () => {
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-2xl flex flex-col items-center mt-8 px-4 py-6 bg-opacity-90  rounded-lg shadow-lg">
+      <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6 bg-opacity-90  rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit}
-          className="w-full flex flex-row items-center p-4 gap-4 border-b "
+          className="w-full flex flex-row items-center p-4 gap-5 border-b "
         >
           <textarea
              className="flex-grow h-16 p-2 border-none rounded-md bg-slate-900 text-white border-white placeholder-gray-400"
