@@ -136,7 +136,7 @@ const Home = () => {
               })
             ) : (
               <p className="text-center text-sm text-gray-300">
-                No notes available. Start by adding one!
+                No notes available in this room yet. add one...
               </p>
             )}
           </div>
