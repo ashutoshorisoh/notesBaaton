@@ -110,7 +110,7 @@ const Home = () => {
         </form>
 
         {message && (
-          <p className="mt-4 text-center text-sm text-emerald-200">{message}</p>
+          <p className="mt-4 text-center text-sm text-emerald-400">{message}</p>
         )}
 
         {loading ? (
@@ -126,7 +126,7 @@ const Home = () => {
                     className="note-item bg-gray-700 text-white p-4 mb-3 w-full rounded-md shadow-sm"
                   >
                     <p className="text-lg">{noteItem.note}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-gray-200">
                       {noteItem.createdAt
                         ? new Date(noteItem.createdAt).toLocaleString()
                         : "No timestamp"}
