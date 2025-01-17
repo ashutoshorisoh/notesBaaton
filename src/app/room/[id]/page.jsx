@@ -95,7 +95,7 @@ const Home = () => {
           className="w-full flex flex-row items-center p-4 gap-5 border-b "
         >
           <textarea
-             className="flex-grow h-16 p-2 border-none rounded-md bg-slate-900 text-white border-white placeholder-gray-400"
+             className="flex-grow h-16 p-3 border-none rounded-md bg-slate-900 text-white border-white placeholder-gray-400"
              placeholder="Enter your note"
              value={note}
              onChange={(e) => setNote(e.target.value)}
@@ -103,14 +103,14 @@ const Home = () => {
 
           <button
             type="submit"
-            className="h-16 px-6 bg-blue-300 border-white text-black rounded-md hover:bg-green-600"
+            className="h-16 px-6 bg-blue-20 border-white text-black rounded-md hover:bg-green-700"
           >
             Submit
           </button>
         </form>
 
         {message && (
-          <p className="mt-4 text-center text-sm text-emerald-400">{message}</p>
+          <p className="mt-4 text-center text-sm text-emerald-900">{message}</p>
         )}
 
         {loading ? (
