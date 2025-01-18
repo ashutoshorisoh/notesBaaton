@@ -76,12 +76,12 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-black">
+    <div className="min-h-screen flex flex-col items-center justify-start bg-blue-900">
       {/* Sticky Navbar */}
       <header className="sticky top-0 w-full  p-4 flex justify-between items-center text-white bg-slate-900 shadow-md">
         <h1 className="lg:text-4xl text-2xl font-semibold text-emerald-200">notesBaaton</h1>
         <button
-          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700"
+          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-100"
           onClick={handleLogout}
         >
           Logout
