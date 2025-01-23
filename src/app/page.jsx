@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 export default function Home() {
   const [roomname, setRoomname] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
 
   const handleAdd = async () => {
@@ -25,7 +26,7 @@ export default function Home() {
 
       // Sending POST request to the API
       const res = await axios.post("/api/roomlogin", roomData);
-
+      setLoading(true)
       // Extract the user ID from the response
       const { userId } = res.data;
 
@@ -83,7 +84,7 @@ export default function Home() {
           >
             Cancel
           </Button>
-          <Button onClick={handleAdd}>Join / Create Room</Button>
+          <Button onClick={handleAdd}>{loading? "wait..": "join/create room"}</Button>
         </CardFooter>
       </Card>
     </div>

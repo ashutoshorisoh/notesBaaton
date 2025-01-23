@@ -76,7 +76,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-blue-900">
+    <div className="min-h-screen flex flex-col items-center justify-start bg-blue-400">
       {/* Sticky Navbar */}
       <header className="sticky top-0 w-full  p-4 flex justify-between items-center text-white bg-slate-900 shadow-md">
         <h1 className="lg:text-4xl text-2xl font-semibold text-emerald-200">notesBaaton</h1>
@@ -92,10 +92,10 @@ const Home = () => {
       <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6 bg-opacity-90  rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit}
-          className="w-full flex flex-row items-center p-4 gap-5 border-b "
+          className="w-full flex flex-row items-center p-4 gap-5 border-b"
         >
           <textarea
-             className="flex-grow h-16 p-3 border-none rounded-md bg-slate-900 text-white border-white placeholder-gray-400"
+             className="flex-grow h-16 p-3 border-none rounded-md bg-slate-600 text-white border-white placeholder-gray-400"
              placeholder="Enter your note"
              value={note}
              onChange={(e) => setNote(e.target.value)}
@@ -103,7 +103,7 @@ const Home = () => {
 
           <button
             type="submit"
-            className="h-16 px-6 bg-blue-20 border-white text-black rounded-md hover:bg-green-700"
+            className="h-16 px-6 bg-blue-20 border-white text-black rounded-md hover:bg-green-100 bg-green-500"
           >
             Submit
           </button>
