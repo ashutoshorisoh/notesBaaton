@@ -9,6 +9,7 @@ const Home = () => {
   const [notes, setNotes] = useState([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [addLoading, setAddLoading] = useState(false); // State to control button text
 
   const router = useRouter();
   const params = useParams();
@@ -25,7 +26,13 @@ const Home = () => {
           params: { roomId },
         });
         console.log("Fetched notes:", response.data); // Log the fetched notes for debugging
-        setNotes(response.data.notes || []);
+        
+        // Sort notes by createdAt, latest first
+        const sortedNotes = response.data.notes?.sort((a, b) => 
+          new Date(b.createdAt) - new Date(a.createdAt)
+        );
+  
+        setNotes(sortedNotes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
         setMessage("Failed to fetch notes. Please try again later.");
@@ -33,7 +40,7 @@ const Home = () => {
         setLoading(false);
       }
     };
-
+  
     if (roomId) {
       console.log("Fetching notes for roomId:", roomId);
       fetchNotes();
@@ -56,6 +63,8 @@ const Home = () => {
       return;
     }
 
+    setAddLoading(true); // Set addLoading to true when adding note
+
     try {
       const response = await axios.post("/api/notes", { note, room: roomId });
       console.log("Response from backend:", response.data); // Log the response for debugging
@@ -77,6 +86,8 @@ const Home = () => {
       setMessage(
         error.response?.data?.error || "An error occurred while adding the note."
       );
+    } finally {
+      setAddLoading(false); // Reset addLoading to false after adding the note
     }
   };
 
@@ -86,7 +97,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-blue-400">
+    <div className="min-h-screen flex flex-col items-center justify-start back">
       {/* Sticky Navbar */}
       <header className="sticky top-0 w-full p-4 flex justify-between items-center text-white bg-slate-900 shadow-md">
         <h1 className="lg:text-4xl text-2xl font-semibold text-emerald-200">notesBaaton</h1>
@@ -106,7 +117,7 @@ const Home = () => {
         >
           <textarea
             ref={textareaRef} // Set the reference to the textarea
-            className="flex-grow p-3 border-none rounded-md bg-slate-600 text-white border-white placeholder-gray-400 resize-none"
+            className="flex-grow p-3 border-none rounded-md bg-slate-100 text-black border-white placeholder-gray-400 resize-none"
             placeholder="Enter your note"
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -114,9 +125,9 @@ const Home = () => {
 
           <button
             type="submit"
-            className="h-16 px-6 bg-blue-200 text-black rounded-md hover:bg-green-100 bg-green-500"
+            className="h-16 px-6  text-white hover:text-black rounded-md hover:bg-green-100 bg-green-800"
           >
-            Add Note
+            {addLoading ? "Hang on, we’re adding..." : "Add Note"} {/* Change button text */}
           </button>
         </form>
 
@@ -134,7 +145,7 @@ const Home = () => {
                 return (
                   <div
                     key={noteItem._id}
-                    className="note-item bg-gray-700 text-white p-4 mb-3 w-full rounded-md shadow-sm"
+                    className="note-item bg-gray-700 border-gray-50  text-white p-4 mb-3 w-full rounded-lg shadow-xl"
                   >
                     <p className="text-lg whitespace-pre-wrap">{noteItem.note}</p>
                     <p className="text-sm text-gray-200">

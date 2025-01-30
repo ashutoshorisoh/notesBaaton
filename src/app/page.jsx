@@ -44,8 +44,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <Card className="w-[350px]">
+    <div className="flex justify-center items-center min-h-screen back">
+      <Card className="lg:w-[350px] w-[250px]">
         <CardHeader>
           <CardTitle>Create Room</CardTitle>
           <CardDescription>Enter the details to create/join a room.</CardDescription>
