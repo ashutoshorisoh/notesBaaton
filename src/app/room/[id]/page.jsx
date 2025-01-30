@@ -102,7 +102,7 @@ const Home = () => {
       <header className="sticky top-0 w-full p-4 flex justify-between items-center text-white bg-slate-900 shadow-md">
         <h1 className="lg:text-4xl text-2xl font-semibold text-emerald-200">notesBaaton</h1>
         <button
-          className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-100"
+          className="bg-red-600 text-white hover:text-black px-4 py-2 rounded-md hover:bg-red-100"
           onClick={handleLogout}
         >
           Logout
@@ -110,7 +110,7 @@ const Home = () => {
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6 bg-opacity-90 rounded-lg shadow-lg">
+      <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6  rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit}
           className="w-full flex flex-row items-center p-4 gap-5 border-b"

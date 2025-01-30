@@ -146,7 +146,7 @@ button:hover {
   }
 }
 .back {
-  background: url('https://i.pinimg.com/474x/8f/8b/06/8f8b062a00095a43086c76d6333fa546.jpg');
+  background-color:rgba(128,114,220,0.9);
   background-position: center;
   background-size: cover;
   background-repeat: repeat-y; /* Repeats the background vertically */

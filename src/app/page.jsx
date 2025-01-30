@@ -51,8 +51,8 @@ export default function Home() {
           <CardDescription>Enter the details to create/join a room.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5">
+          <div className="grid w-full items-center lg:gap-4 gap-2">
+            <div className="flex flex-col lg:space-y-1.5 space-y-1">
               <Label htmlFor="roomname">Room Name</Label>
               <Input
                 id="roomname"
@@ -62,7 +62,7 @@ export default function Home() {
                 onChange={(e) => setRoomname(e.target.value)}
               />
             </div>
-            <div className="flex flex-col space-y-1.5">
+            <div className="flex flex-col lg:space-y-1.5 space-y-1">
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
@@ -74,7 +74,7 @@ export default function Home() {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="flex justify-end space-x-2">
+        <CardFooter className="flex justify-end lg:space-x-2 space-x-1.5">
           <Button
             variant="outline"
             onClick={() => {
