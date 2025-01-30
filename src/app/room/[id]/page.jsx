@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 
@@ -14,6 +14,8 @@ const Home = () => {
   const params = useParams();
   const roomId = params?.id || "fallback-id";
 
+  const textareaRef = useRef(null); // Reference to textarea for auto-resizing
+
   // Fetch notes for the room
   useEffect(() => {
     const fetchNotes = async () => {
@@ -22,7 +24,7 @@ const Home = () => {
         const response = await axios.get("/api/fetchnote", {
           params: { roomId },
         });
-        console.log("Fetched notes:", response.data);  // Log the fetched notes for debugging
+        console.log("Fetched notes:", response.data); // Log the fetched notes for debugging
         setNotes(response.data.notes || []);
       } catch (error) {
         console.error("Error fetching notes:", error);
@@ -38,6 +40,14 @@ const Home = () => {
     }
   }, [roomId]);
 
+  // Auto-resize the textarea as user types
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; // Reset the height
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set the height to the scrollHeight
+    }
+  }, [note]); // Trigger whenever the note changes
+
   // Add a new note
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,19 +58,19 @@ const Home = () => {
 
     try {
       const response = await axios.post("/api/notes", { note, room: roomId });
-      console.log("Response from backend:", response.data);  // Log the response for debugging
+      console.log("Response from backend:", response.data); // Log the response for debugging
 
       if (response.status === 201) {
-        const newNote = response.data;  // Use response.data directly
-        console.log("New note added:", newNote);  // Log the newly added note
+        const newNote = response.data; // Use response.data directly
+        console.log("New note added:", newNote); // Log the newly added note
 
         if (newNote?.note && newNote?.createdAt) {
           setNotes((prevNotes) => [newNote, ...prevNotes]);
           setMessage("Note added successfully!");
+          setNote(""); // Clear the textarea after submit
         } else {
           setMessage("Invalid note format received from the backend");
         }
-        setNote("");
       }
     } catch (error) {
       console.error("Error submitting note:", error);
@@ -78,7 +88,7 @@ const Home = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-blue-400">
       {/* Sticky Navbar */}
-      <header className="sticky top-0 w-full  p-4 flex justify-between items-center text-white bg-slate-900 shadow-md">
+      <header className="sticky top-0 w-full p-4 flex justify-between items-center text-white bg-slate-900 shadow-md">
         <h1 className="lg:text-4xl text-2xl font-semibold text-emerald-200">notesBaaton</h1>
         <button
           className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-100"
@@ -89,23 +99,24 @@ const Home = () => {
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6 bg-opacity-90  rounded-lg shadow-lg">
+      <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6 bg-opacity-90 rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit}
           className="w-full flex flex-row items-center p-4 gap-5 border-b"
         >
           <textarea
-             className="flex-grow h-16 p-3 border-none rounded-md bg-slate-600 text-white border-white placeholder-gray-400"
-             placeholder="Enter your note"
-             value={note}
-             onChange={(e) => setNote(e.target.value)}
+            ref={textareaRef} // Set the reference to the textarea
+            className="flex-grow p-3 border-none rounded-md bg-slate-600 text-white border-white placeholder-gray-400 resize-none"
+            placeholder="Enter your note"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
           />
 
           <button
             type="submit"
-            className="h-16 px-6 bg-blue-20 border-white text-black rounded-md hover:bg-green-100 bg-green-500"
+            className="h-16 px-6 bg-blue-200 text-black rounded-md hover:bg-green-100 bg-green-500"
           >
-            Submit
+            Add Note
           </button>
         </form>
 
@@ -125,7 +136,7 @@ const Home = () => {
                     key={noteItem._id}
                     className="note-item bg-gray-700 text-white p-4 mb-3 w-full rounded-md shadow-sm"
                   >
-                    <p className="text-lg">{noteItem.note}</p>
+                    <p className="text-lg whitespace-pre-wrap">{noteItem.note}</p>
                     <p className="text-sm text-gray-200">
                       {noteItem.createdAt
                         ? new Date(noteItem.createdAt).toLocaleString()
@@ -136,7 +147,7 @@ const Home = () => {
               })
             ) : (
               <p className="text-center text-sm text-gray-300">
-                No notes available in this room yet. add one...
+                No notes available in this room yet. Add one...
               </p>
             )}
           </div>
