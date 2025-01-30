@@ -110,7 +110,7 @@ const Home = () => {
       </header>
 
       {/* Main Content */}
-      <main className="w-full max-w-xl flex flex-col items-center mt-8 px-4 py-6  rounded-lg shadow-lg">
+      <main className="w-full max-w-xl note flex flex-col items-center mt-8 px-4 py-6  rounded-lg shadow-lg">
         <form
           onSubmit={handleSubmit}
           className="w-full flex flex-row items-center p-4 gap-5 border-b"
