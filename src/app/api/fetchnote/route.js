@@ -4,10 +4,10 @@ import { NextResponse } from "next/server";
 
 export const GET = async (req) => {
   try {
-    // Connect to the database
+    // ✅ Connect to the database
     await connectDB();
 
-    // Extract roomId from the query parameters
+    // ✅ Extract roomId from the query parameters
     const { searchParams } = new URL(req.url);
     const roomId = searchParams.get("roomId");
 
@@ -18,37 +18,21 @@ export const GET = async (req) => {
       );
     }
 
-    // Fetch notes based on roomId
-    const fetchNotesByRoomId = async (roomId) => {
-      try {
-        const notes = await Notes.find({ room: roomId })
-        .sort({ createdAt: -1 })
-      .lean();
-        return notes;
-      } catch (error) {
-        console.error("Error fetching notes:", error);
-        throw error;
-      }
-    };
+    console.log("Fetching notes for Room ID:", roomId);
 
-    const notes = await fetchNotesByRoomId(roomId);
+    // ✅ Fetch notes based on roomId with debugging logs
+    const notes = await Notes.find({ room: roomId }).populate("room");
 
-    // If no notes are found, return a 404 response
-    if (!notes || notes.length === 0) {
-      return NextResponse.json(
-        { notes: [] }, // Return empty array instead of a 404
-        { status: 200 }
-      );
+    // Additional logging to ensure notes are found
+    if (notes && notes.length > 0) {
+      console.log(`Fetched ${notes.length} notes for Room ID: ${roomId}`);
+    } else {
+      console.log(`No notes found for Room ID: ${roomId}`);
     }
 
-    console.log("Received Room ID:", roomId);
-console.log("Found Notes:", notes);
-
-    
-
-    // Return the fetched notes
+    // ✅ Return the notes (empty array if none found)
     return NextResponse.json(
-      { notes },
+      { notes: notes || [] }, // Always return an array (empty if no notes found)
       { status: 200 }
     );
   } catch (error) {

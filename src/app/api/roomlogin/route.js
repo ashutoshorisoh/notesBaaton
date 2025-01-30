@@ -8,27 +8,32 @@ export const POST = async (req) => {
 
         // Check for missing fields
         if (!roomname || !password) {
-            console.log("Username or password not provided");
-            return NextResponse.json({ error: "Please provide username and password" }, { status: 400 });
+            console.log("Room name or password not provided");
+            return NextResponse.json({ error: "Please provide room name and password" }, { status: 400 });
         }
 
         await connectDB();
 
-        // Check if user already exists
-       
-        // Create new user
+        // Check if the room already exists
+        const existingRoom = await Room.findOne({ roomname });
+        if (existingRoom) {
+            console.log("Room already exists");
+            return NextResponse.json({ message: "Room already exists", userId: existingRoom._id }, { status: 200 });
+        }
+
+        // Create new room if it doesn't exist
         const newRoom = new Room({
             roomname,
             password,
         });
 
-        // Save the new user
+        // Save the new room
         await newRoom.save();
-        console.log("User created successfully", newRoom);
+        console.log("Room created successfully", newRoom);
 
-        return NextResponse.json({ message: "room created successfully", userId: newRoom._id }, { status: 201 });
+        return NextResponse.json({ message: "Room created successfully", userId: newRoom._id }, { status: 201 });
     } catch (error) {
-        console.error("Error during signup:", error);  // Log the error to understand the issue
-        return NextResponse.json({ message: "Connection failed or error during signup",  error: error.message }, { status: 500 });
+        console.error("Error during room creation:", error);  // Log the error to understand the issue
+        return NextResponse.json({ message: "Connection failed or error during room creation", error: error.message }, { status: 500 });
     }
 };
