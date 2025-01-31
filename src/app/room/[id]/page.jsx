@@ -125,7 +125,7 @@ const Home = () => {
 
           <button
             type="submit"
-            className="h-16 px-6  text-white hover:text-black rounded-md hover:bg-green-100 bg-green-800"
+            className="h-16 px-6 lg:text-lg text-md text-white hover:text-black rounded-md hover:bg-green-100 bg-green-800"
           >
             {addLoading ? "Hang on, we’re adding..." : "Add Note"} {/* Change button text */}
           </button>
